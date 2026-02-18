@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://vvbu8l2dlb46"]
+
+[ext_resource type="Texture2D" uid="uid://chxw7lgcmnca5" path="res://Assets/Tileset/Level_One/Fountain.png" id="1_4a0cv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvcrq"]
+atlas = ExtResource("1_4a0cv")
+region = Rect2(0, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ur0f"]
+atlas = ExtResource("1_4a0cv")
+region = Rect2(72, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1mu2"]
+atlas = ExtResource("1_4a0cv")
+region = Rect2(144, 0, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tttkl"]
+atlas = ExtResource("1_4a0cv")
+region = Rect2(216, 0, 72, 72)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dcnd3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvcrq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ur0f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1mu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tttkl")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[node name="Fountain" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dcnd3")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.715237
