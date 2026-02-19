@@ -9,13 +9,16 @@ var player = null
 
 var speed := 60
 var health := 60
-var damage := 5
+
+var normal_damage := 8
+var bite_damage := 20
 
 var attack_range := 70
 var detection_range := 300
 
 var is_dead := false
 var is_attacking := false
+var has_bitten_player := false   # NEW FLAG
 
 
 func _ready():
@@ -33,7 +36,7 @@ func _physics_process(delta):
 	if is_dead:
 		return
 
-	# Keep healthbar above head
+	# Healthbar follow
 	health_bar.global_position = global_position + Vector2(0, -40)
 
 	if player == null:
@@ -56,7 +59,13 @@ func _physics_process(delta):
 	# ATTACK
 	if distance <= attack_range and not is_attacking:
 		velocity.x = 0
-		attack()
+		
+		# Play Bite first time
+		if not has_bitten_player:
+			await bite_attack()
+		else:
+			await normal_attack()
+		
 		move_and_slide()
 		return
 
@@ -73,11 +82,35 @@ func _physics_process(delta):
 
 
 # =========================
-# ATTACK
+# BITE ATTACK (FIRST HIT)
 # =========================
-func attack():
+func bite_attack():
+
+	if is_dead:
+		return
+
 	is_attacking = true
-	velocity.x = 0
+	
+	sprite.play("Bite")
+	attack_area.monitoring = true
+	
+	await sprite.animation_finished
+	
+	attack_area.monitoring = false
+	
+	has_bitten_player = true
+	is_attacking = false
+
+
+# =========================
+# NORMAL ATTACK
+# =========================
+func normal_attack():
+
+	if is_dead:
+		return
+
+	is_attacking = true
 	
 	var attack_choice = randi() % 2
 	
@@ -91,18 +124,35 @@ func attack():
 	await sprite.animation_finished
 	
 	attack_area.monitoring = false
-
-	if player and attack_area.get_overlapping_bodies().has(player):
-		if player.has_method("take_damage"):
-			player.take_damage(damage)
-
+	
 	is_attacking = false
 
 
 # =========================
-# DAMAGE
+# HIT DETECTION
+# =========================
+func _on_attack_area_body_entered(body):
+
+	if is_dead:
+		return
+
+	if body == self:
+		return
+
+	if body.has_method("take_damage"):
+		
+		# Decide damage type
+		if not has_bitten_player:
+			body.take_damage(bite_damage)
+		else:
+			body.take_damage(normal_damage)
+
+
+# =========================
+# DAMAGE FROM PLAYER
 # =========================
 func take_damage(amount):
+
 	if is_dead:
 		return
 
@@ -119,9 +169,15 @@ func take_damage(amount):
 # DEATH
 # =========================
 func die():
+
+	if is_dead:
+		return
+
 	is_dead = true
+	
 	velocity = Vector2.ZERO
-	sprite.play("Death")
+	
+	sprite.play("Death")   # Loop OFF
 	
 	await sprite.animation_finished
 	
@@ -129,13 +185,15 @@ func die():
 
 
 # =========================
-# DETECTION
+# PLAYER DETECTION
 # =========================
 func _on_detection_area_body_entered(body):
+
 	if body.name == "Player":
 		player = body
 
 
 func _on_detection_area_body_exited(body):
+
 	if body == player:
 		player = null

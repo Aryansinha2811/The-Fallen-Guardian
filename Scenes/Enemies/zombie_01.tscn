@@ -220,7 +220,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ql3h7")
 }],
-"loop": true,
+"loop": false,
 "name": &"Attack01",
 "speed": 8.0
 }, {
@@ -237,7 +237,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5irhe")
 }],
-"loop": true,
+"loop": false,
 "name": &"Attack02",
 "speed": 10.0
 }, {
@@ -275,7 +275,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_y1uba")
 }],
-"loop": true,
+"loop": false,
 "name": &"Bite",
 "speed": 9.0
 }, {
@@ -353,7 +353,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2uip6")
 }],
-"loop": true,
+"loop": false,
 "name": &"Jump",
 "speed": 9.0
 }, {
@@ -398,8 +398,10 @@ script = ExtResource("1_8l148")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_irp08")
-animation = &"Death"
+animation = &"Bite"
 autoplay = "Idle"
+frame = 10
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1.5, 17.5)
@@ -427,3 +429,4 @@ debug_color = Color(0.97883, 0, 0.393016, 0.42)
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]

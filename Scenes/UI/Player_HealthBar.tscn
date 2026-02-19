@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6kavqne0u1d2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdog4"]
+bg_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dgotx"]
+bg_color = Color(0.802018, 0.087397, 3.85046e-07, 1)
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -521.0
+offset_top = 25.0
+offset_bottom = 52.0
+grow_horizontal = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_jdog4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dgotx")
+value = 80.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true

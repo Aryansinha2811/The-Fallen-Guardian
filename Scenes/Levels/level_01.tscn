@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cvuyvssep7c1u"]
+[gd_scene load_steps=19 format=3 uid="uid://cvuyvssep7c1u"]
 
 [ext_resource type="PackedScene" uid="uid://vlwbyd2ftaj7" path="res://Scenes/Player/player_01.tscn" id="1_62qdj"]
 [ext_resource type="Texture2D" uid="uid://b3haj5tpdqlg5" path="res://Assets/Tileset/Level_One/Day/Background.png" id="1_uul0f"]
@@ -11,6 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://c7xevau6p05e4" path="res://Scenes/Enemies/zombie_01.tscn" id="4_h7juy"]
 [ext_resource type="PackedScene" uid="uid://bhy8mhfkyddc" path="res://Scenes/UI/tree_01.tscn" id="5_trymv"]
 [ext_resource type="PackedScene" uid="uid://dbobf04pb81uv" path="res://Scenes/Enemies/arcane_disciple.tscn" id="11_45mte"]
+[ext_resource type="FontFile" uid="uid://bviiik77oxdpc" path="res://Assets/Fonts/Perfect DOS VGA 437 Win.ttf" id="11_ofbr0"]
+[ext_resource type="FontFile" uid="uid://vgvxi07o57ng" path="res://Assets/Fonts/STRIGER.ttf" id="12_706d5"]
+[ext_resource type="Script" path="res://Scripts/Player/Player_Healthbar.gd" id="13_cu37o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5bk2a"]
 texture = ExtResource("2_6yqdw")
@@ -1173,6 +1176,12 @@ texture = ExtResource("2_6yqdw")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_5bk2a")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vofrb"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5as0f"]
+bg_color = Color(0.86092, 0.157005, 2.88785e-07, 1)
+
 [node name="Level_01" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -1273,10 +1282,70 @@ editor_draw_limits = true
 [node name="Zombie01" parent="." instance=ExtResource("4_h7juy")]
 position = Vector2(113, -21)
 
+[node name="Label2" type="Label" parent="Zombie01"]
+offset_left = -43.0
+offset_top = -38.0
+offset_right = 83.0
+offset_bottom = -15.0
+theme_override_colors/font_color = Color(0.399813, 0.0136258, 9.62615e-08, 1)
+theme_override_fonts/font = ExtResource("11_ofbr0")
+text = "Hollowed"
+
 [node name="Zombie02" parent="." instance=ExtResource("4_h7juy")]
-position = Vector2(751, -21)
+position = Vector2(762, -21)
+
+[node name="Label" type="Label" parent="Zombie02"]
+offset_left = -34.0
+offset_top = -41.0
+offset_right = 92.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(0.399813, 0.0136258, 9.62615e-08, 1)
+theme_override_fonts/font = ExtResource("11_ofbr0")
+text = "Hollowed"
 
 [node name="Objects" type="Node" parent="."]
 
 [node name="ArcaneDisciple" parent="." instance=ExtResource("11_45mte")]
 position = Vector2(1772, -54)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -504.0
+offset_top = -126.0
+offset_right = -464.0
+offset_bottom = -86.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("12_706d5")
+theme_override_font_sizes/font_size = 44
+text = "The Sentinal "
+
+[node name="Player_Healthbar" type="ProgressBar" parent="CanvasLayer/Control/VBoxContainer" groups=["player_healthbar"]]
+custom_minimum_size = Vector2(1000, 35)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_vofrb")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5as0f")
+value = 80.0
+show_percentage = false
+script = ExtResource("13_cu37o")
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Control/VBoxContainer/Player_Healthbar"]
+wait_time = 0.5
+
+[connection signal="timeout" from="CanvasLayer/Control/VBoxContainer/Player_Healthbar/Timer" to="CanvasLayer/Control/VBoxContainer/Player_Healthbar" method="_on_timer_timeout"]
